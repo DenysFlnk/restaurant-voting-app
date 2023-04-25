@@ -1,5 +1,6 @@
 package com.restaurantvoting.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
@@ -7,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User extends AbstractPersistable<Integer> {
+public class User extends AbstractBaseEntity {
 
     @Column(name = "name")
     private String name;
@@ -17,6 +18,7 @@ public class User extends AbstractPersistable<Integer> {
 
 
     @Column(name = "password")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Column(name = "enabled")

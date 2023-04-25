@@ -1,13 +1,13 @@
 package com.restaurantvoting.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.springframework.data.jpa.domain.AbstractPersistable;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "meal")
-public class Meal extends AbstractPersistable<Integer> {
+public class Meal extends AbstractBaseEntity {
 
     @Column(name = "meal_title")
     private String mealTitle;
@@ -15,14 +15,21 @@ public class Meal extends AbstractPersistable<Integer> {
     @Column(name = "price")
     private int price;
 
+    @Column(name = "date")
+    private LocalDate date;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    private Restaurant restaurant;
+
     public Meal() {
     }
 
-    public Meal(String mealTitle, int price) {
+    public Meal(String mealTitle, int price, LocalDate date) {
         this.mealTitle = mealTitle;
         this.price = price;
+        this.date = date;
     }
-
 
     public String getMealTitle() {
         return mealTitle;
@@ -40,12 +47,29 @@ public class Meal extends AbstractPersistable<Integer> {
         this.price = price;
     }
 
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
+
     @Override
     public String toString() {
         return "Meal{" +
                 "id='" + getId() + '\'' +
                 ", mealTitle='" + mealTitle + '\'' +
-                ", price=" + price +
+                ", price=" + price + '\'' +
+                ", date=" + date.toString() +
                 "} ";
     }
 }

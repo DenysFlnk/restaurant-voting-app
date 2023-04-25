@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "restaurant")
-public class Restaurant extends AbstractPersistable<Integer> {
+public class Restaurant extends AbstractBaseEntity{
 
     @Column(name = "title")
     private String title;
@@ -16,16 +16,13 @@ public class Restaurant extends AbstractPersistable<Integer> {
     @Column(name = "active")
     private boolean active;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    private List<Meal> currentMenu;
 
     public Restaurant() {
     }
 
-    public Restaurant(String title, boolean active, List<Meal> currentMenu) {
+    public Restaurant(String title, boolean active) {
         this.title = title;
         this.active = active;
-        this.currentMenu = currentMenu;
     }
 
     public String getTitle() {
@@ -42,14 +39,6 @@ public class Restaurant extends AbstractPersistable<Integer> {
 
     public void setActive(boolean active) {
         this.active = active;
-    }
-
-    public List<Meal> getCurrentMenu() {
-        return currentMenu;
-    }
-
-    public void setCurrentMenu(List<Meal> currentMenu) {
-        this.currentMenu = currentMenu;
     }
 
     @Override

@@ -1,4 +1,3 @@
-DELETE FROM MENU;
 DELETE FROM VOTE;
 DELETE FROM USER_ROLE;
 DELETE FROM MEAL;
@@ -16,30 +15,23 @@ VALUES (1, 'USER'),
        (3, 'USER'),
        (3, 'ADMIN');
 
-INSERT INTO RESTAURANT (TITLE)
-VALUES ('Bistro'),
-       ('Cafeteria'),
-       ('Restaurant');
+INSERT INTO RESTAURANT (TITLE, ACTIVE)
+VALUES ('Bistro', true),
+       ('Cafeteria', true),
+       ('Restaurant', true),
+       ('Inactive restaurant', false);
 
-INSERT INTO MEAL (MEAL_TITLE, PRICE)
-VALUES ('Tea', 2),
-       ('Coffee', 3),
-       ('Vine', 5),
-       ('Salad', 5),
-       ('Croissant', 4),
-       ('Steak', 8);
-
-INSERT INTO MENU (MEAL_ID, RESTAURANT_ID, MENU_DATE)
-VALUES (1, 1, CURRENT_DATE),
-       (2, 2, CURRENT_DATE),
-       (3, 3, CURRENT_DATE),
-       (4, 1, CURRENT_DATE),
-       (5, 2, CURRENT_DATE),
-       (6, 3, CURRENT_DATE);
+INSERT INTO MEAL (RESTAURANT_ID, MEAL_TITLE, PRICE)
+VALUES (1, 'Tea', 2),
+       (2, 'Coffee', 3),
+       (3, 'Vine', 5),
+       (1, 'Salad', 5),
+       (2, 'Croissant', 4),
+       (3, 'Steak', 8);
 
 INSERT INTO VOTE (USER_ID, RESTAURANT_ID, DATE_TIME)
-VALUES (1, 2, CURRENT_TIMESTAMP()),
-       (2, 2, CURRENT_TIMESTAMP()),
-       (3, 1, CURRENT_TIMESTAMP());
+VALUES (1, 2, TIMESTAMPADD(MINUTE , 570, CURRENT_DATE)),
+       (2, 2, TIMESTAMPADD(MINUTE , 540, CURRENT_DATE)),
+       (3, 1, TIMESTAMPADD(MINUTE , 654, CURRENT_DATE));
 
 

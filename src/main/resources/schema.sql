@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS menu;
 DROP TABLE IF EXISTS vote;
 DROP TABLE IF EXISTS meal;
 DROP TABLE IF EXISTS restaurant;
@@ -33,25 +32,21 @@ CREATE UNIQUE INDEX restaurant_unique_title_idx ON restaurant (title);
 
 CREATE TABLE meal
 (
-    id         INTEGER PRIMARY KEY AUTO_INCREMENT,
-    meal_title VARCHAR(255) NOT NULL,
-    price      INTEGER      NOT NULL
+    id            INTEGER PRIMARY KEY AUTO_INCREMENT,
+    restaurant_id INTEGER                   NOT NULL,
+    meal_title    VARCHAR(255)              NOT NULL,
+    price         INTEGER                   NOT NULL,
+    date          DATE DEFAULT CURRENT_DATE NOT NULL,
+    FOREIGN KEY (restaurant_id) REFERENCES RESTAURANT (id) ON DELETE CASCADE
 );
-CREATE UNIQUE INDEX meal_unique_title_price_idx ON meal (meal_title, price);
+CREATE UNIQUE INDEX meal_unique_title_restaurantId_date_idx ON meal (meal_title, restaurant_id, date);
 
 CREATE TABLE vote
 (
+    id            INTEGER PRIMARY KEY AUTO_INCREMENT,
     user_id       INTEGER   NOT NULL,
     restaurant_id INTEGER   NOT NULL,
     date_time     TIMESTAMP NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
     FOREIGN KEY (restaurant_id) REFERENCES restaurant (id) ON DELETE CASCADE
-);
-
-CREATE TABLE menu
-(
-    meal_id       INTEGER NOT NULL,
-    restaurant_id INTEGER NOT NULL,
-    menu_date     DATE    NOT NULL,
-    CONSTRAINT mealId_date_idx UNIQUE (meal_id, menu_date)
 );

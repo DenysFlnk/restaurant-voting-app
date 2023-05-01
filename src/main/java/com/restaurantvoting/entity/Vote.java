@@ -9,16 +9,8 @@ import java.time.LocalDateTime;
 @Table(name = "vote")
 public class Vote extends AbstractBaseEntity{
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id", nullable = false)
-//    private User user;
-
     @Column(name = "user_id", insertable = false, updatable = false)
     private int userId;
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "restaurant_id", nullable = false)
-//    private Restaurant restaurant;
 
     @Column(name = "restaurant_id", insertable = false, updatable = false)
     private int restaurantId;

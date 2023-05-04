@@ -2,7 +2,6 @@ package com.restaurantvoting.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import java.util.Set;
 

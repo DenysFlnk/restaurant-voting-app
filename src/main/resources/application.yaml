@@ -1,4 +1,5 @@
 spring:
+
   jpa:
     show-sql: true
     open-in-view: false
@@ -9,6 +10,13 @@ spring:
         format_sql: true
         default_batch_fetch_size: 20
         jdbc.batch_size: 20
+
+  cache:
+    cache-names: activeRestaurants_cache
+    caffeine:
+      spec: maximumSize=5000, expireAfterAccess=600s
+
+
   datasource:
     url: jdbc:h2:mem:voting
     username: sa

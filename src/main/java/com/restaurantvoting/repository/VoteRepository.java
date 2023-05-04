@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface VoteRepository extends JpaRepository<Vote, Integer> {
-    List<Vote> getAllByRestaurantIdAndDateTimeBetween(int restaurantId, LocalDateTime start, LocalDateTime end);
-
     Vote getVoteByUserIdAndDateTimeBetween(int userId, LocalDateTime start, LocalDateTime end);
+
+    int countAllByRestaurantIdAndDateTimeBetween(int userId, LocalDateTime start, LocalDateTime end);
 }

@@ -1,7 +1,6 @@
 package com.restaurantvoting.entity;
 
 import jakarta.persistence.*;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import java.time.LocalDateTime;
 
@@ -12,7 +11,7 @@ public class Vote extends AbstractBaseEntity{
     @Column(name = "user_id", insertable = false, updatable = false)
     private int userId;
 
-    @Column(name = "restaurant_id", insertable = false, updatable = false)
+    @Column(name = "restaurant_id", insertable = false)
     private int restaurantId;
 
     @Column(name = "date_time")
@@ -27,14 +26,6 @@ public class Vote extends AbstractBaseEntity{
         this.dateTime = dateTime;
     }
 
-//    public User getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(User user) {
-//        this.user = user;
-//    }
-
     public int getUserId() {
         return userId;
     }
@@ -42,14 +33,6 @@ public class Vote extends AbstractBaseEntity{
     public void setUserId(int userId) {
         this.userId = userId;
     }
-
-//    public Restaurant getRestaurant() {
-//        return restaurant;
-//    }
-//
-//    public void setRestaurant(Restaurant restaurant) {
-//        this.restaurant = restaurant;
-//    }
 
     public int getRestaurantId() {
         return restaurantId;

@@ -1,10 +1,6 @@
 package com.restaurantvoting.entity;
 
 import jakarta.persistence.*;
-import org.springframework.data.jpa.domain.AbstractPersistable;
-
-
-import java.util.List;
 
 @Entity
 @Table(name = "restaurant")

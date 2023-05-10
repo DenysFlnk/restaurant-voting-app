@@ -1,26 +1,27 @@
 package com.restaurantvoting.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import org.hibernate.Hibernate;
+import org.springframework.data.domain.Persistable;
 
 
 @MappedSuperclass
-public abstract class AbstractBaseEntity{
+public abstract class BaseEntity implements Persistable<Integer> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer id;
 
-    protected AbstractBaseEntity() {
+    protected BaseEntity() {
     }
 
-    protected AbstractBaseEntity(Integer id) {
+    protected BaseEntity(Integer id) {
         this.id = id;
     }
-
 
     public void setId(Integer id) {
         this.id = id;
@@ -29,6 +30,12 @@ public abstract class AbstractBaseEntity{
 
     public Integer getId() {
         return id;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isNew() {
+        return id == null;
     }
 
     @Override
@@ -44,7 +51,7 @@ public abstract class AbstractBaseEntity{
         if (o == null || !getClass().equals(Hibernate.getClass(o))) {
             return false;
         }
-        AbstractBaseEntity that = (AbstractBaseEntity) o;
+        BaseEntity that = (BaseEntity) o;
         return id != null && id.equals(that.id);
     }
 

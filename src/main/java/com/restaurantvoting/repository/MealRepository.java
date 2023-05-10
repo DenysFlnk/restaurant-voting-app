@@ -14,6 +14,4 @@ public interface MealRepository extends JpaRepository<Meal, Integer> {
     List<Meal> getAllByCurrentDate();
 
     List<Meal> getAllByRestaurantId(int id);
-
-    Optional<Meal> findByIdAndRestaurantId(int mealId, int restaurantId);
 }

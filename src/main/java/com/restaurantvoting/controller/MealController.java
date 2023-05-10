@@ -1,14 +1,18 @@
 package com.restaurantvoting.controller;
 
 import com.restaurantvoting.entity.Meal;
+import com.restaurantvoting.error.NotFoundException;
 import com.restaurantvoting.repository.MealRepository;
 import com.restaurantvoting.repository.RestaurantRepository;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import static com.restaurantvoting.util.validation.ValidationUtil.*;
 
 import java.util.List;
 
@@ -36,13 +40,14 @@ public class MealController {
 
     @GetMapping("/{mealId}")
     public Meal get(@PathVariable("id") int id, @PathVariable("mealId") int mealId){
-        log.info("get {} for {}", mealId, id);
-        return mealRepository.findByIdAndRestaurantId(mealId, id).orElse(null);
+        log.info("get {} for restaurant {}", mealId, id);
+        return checkNotFoundWithId(mealRepository.findById(mealId).orElse(null), mealId);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Meal create(@RequestBody Meal meal, @PathVariable int id){
-        log.info("create {} for {}", meal, id);
+    public Meal create(@RequestBody @Valid Meal meal, @PathVariable int id){
+        log.info("create {} for restaurant {}", meal, id);
+        checkNew(meal);
         meal.setRestaurant(restaurantRepository.getReferenceById(id));
         return mealRepository.save(meal);
     }
@@ -50,14 +55,16 @@ public class MealController {
     @DeleteMapping("/{mealId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") int id, @PathVariable("mealId") int mealId){
-        log.info("delete {} for {}", mealId, id);
-        mealRepository.findByIdAndRestaurantId(mealId, id).ifPresent(mealRepository::delete);
+        log.info("delete with id={} for restaurant {}", mealId, id);
+        Meal deleteMeal = checkNotFoundWithId(mealRepository.findById(mealId).orElse(null), mealId);
+        mealRepository.delete(deleteMeal);
     }
 
-    @PutMapping
+    @PutMapping("/{mealId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody Meal meal, @PathVariable int id){
-        log.info("update {} for {}", meal, id);
+    public void update(@RequestBody @Valid Meal meal, @PathVariable("id") int id, @PathVariable("mealId") int mealId){
+        log.info("update {} with id={} for restaurant {}", meal, mealId, id);
+        assureIdConsistent(meal, mealId);
         meal.setRestaurant(restaurantRepository.getReferenceById(id));
         mealRepository.save(meal);
     }

@@ -1,26 +1,29 @@
 package com.restaurantvoting.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "vote")
-public class Vote extends AbstractBaseEntity{
+public class Vote extends BaseEntity {
 
-    @Column(name = "user_id", insertable = false, updatable = false)
-    private int userId;
+    @Column(name = "user_id", updatable = false)
+    private Integer userId;
 
-    @Column(name = "restaurant_id", insertable = false)
-    private int restaurantId;
+    @Column(name = "restaurant_id")
+    @NotNull
+    private Integer restaurantId;
 
     @Column(name = "date_time")
-    private LocalDateTime dateTime;
+    private LocalDateTime dateTime = LocalDateTime.now();
 
     public Vote() {
     }
 
-    public Vote(int userId, int restaurantId, LocalDateTime dateTime) {
+    public Vote(Integer id, Integer userId, Integer restaurantId, LocalDateTime dateTime) {
+        super(id);
         this.userId = userId;
         this.restaurantId = restaurantId;
         this.dateTime = dateTime;
@@ -30,7 +33,7 @@ public class Vote extends AbstractBaseEntity{
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -38,7 +41,7 @@ public class Vote extends AbstractBaseEntity{
         return restaurantId;
     }
 
-    public void setRestaurantId(int restaurantId) {
+    public void setRestaurantId(Integer restaurantId) {
         this.restaurantId = restaurantId;
     }
 

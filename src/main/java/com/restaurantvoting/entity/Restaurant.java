@@ -1,22 +1,30 @@
 package com.restaurantvoting.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "restaurant")
-public class Restaurant extends AbstractBaseEntity{
+public class Restaurant extends BaseEntity {
 
     @Column(name = "title")
+    @NotNull
+    @NotBlank
+    @Size(min = 3, max = 30)
     private String title;
 
     @Column(name = "active")
+    @NotNull
     private boolean active;
 
 
     public Restaurant() {
     }
 
-    public Restaurant(String title, boolean active) {
+    public Restaurant(Integer id, String title, boolean active) {
+        super(id);
         this.title = title;
         this.active = active;
     }

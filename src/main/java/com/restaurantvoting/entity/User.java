@@ -2,25 +2,38 @@ package com.restaurantvoting.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User extends AbstractBaseEntity {
+public class User extends BaseEntity {
 
     @Column(name = "name")
+    @NotNull
+    @NotBlank
+    @Size(min = 3, max = 15)
     private String name;
 
     @Column(name = "email")
+    @Email
+    @Size(max = 128)
     private String email;
 
 
     @Column(name = "password")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @NotNull
+    @NotBlank
+    @Size(max = 256)
     private String password;
 
     @Column(name = "enabled")
+    @NotNull
     private boolean enabled;
 
     @Enumerated(EnumType.STRING)
@@ -32,7 +45,8 @@ public class User extends AbstractBaseEntity {
     public User() {
     }
 
-    public User(String name, String email, String password, boolean enabled, Set<Role> roles) {
+    public User(Integer id, String name, String email, String password, boolean enabled, Set<Role> roles) {
+        super(id);
         this.name = name;
         this.email = email;
         this.password = password;

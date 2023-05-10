@@ -12,9 +12,9 @@ spring:
         jdbc.batch_size: 20
 
   cache:
-    cache-names: activeRestaurants_cache
+    cache-names: activeRestaurants_cache, allVotes_cache
     caffeine:
-      spec: maximumSize=5000, expireAfterAccess=600s
+      spec: maximumSize=5000, expireAfterAccess=60s
 
 
   datasource:

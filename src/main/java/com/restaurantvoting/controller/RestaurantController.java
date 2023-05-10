@@ -2,6 +2,7 @@ package com.restaurantvoting.controller;
 
 import com.restaurantvoting.entity.Restaurant;
 import com.restaurantvoting.repository.RestaurantRepository;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import static com.restaurantvoting.util.validation.ValidationUtil.*;
 
 import java.util.List;
 
@@ -34,12 +37,13 @@ public class RestaurantController {
     @GetMapping("/{id}")
     public Restaurant get(@PathVariable int id){
         log.info("get {}", id);
-        return restaurantRepository.findById(id).orElse(null);
+        return checkNotFoundWithId(restaurantRepository.findById(id).orElse(null), id);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Restaurant create(@RequestBody Restaurant restaurant){
+    public Restaurant create(@RequestBody @Valid Restaurant restaurant){
         log.info("create {}", restaurant);
+        checkNew(restaurant);
         return restaurantRepository.save(restaurant);
     }
 
@@ -47,13 +51,15 @@ public class RestaurantController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id){
         log.info("delete {}", id);
-        restaurantRepository.findById(id).ifPresent(restaurantRepository::delete);
+        Restaurant deleteRestaurant = checkNotFoundWithId(restaurantRepository.findById(id).orElse(null), id);
+        restaurantRepository.delete(deleteRestaurant);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody Restaurant restaurant, @PathVariable int id){
+    public void update(@RequestBody @Valid Restaurant restaurant, @PathVariable int id){
         log.info("update {} with id {}", restaurant, id);
+        assureIdConsistent(restaurant, id);
         restaurantRepository.save(restaurant);
     }
 
@@ -61,7 +67,7 @@ public class RestaurantController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void activate(@PathVariable int id, @RequestParam boolean active){
         log.info(active ? "activate {}" : "deactivate {}", id);
-        Restaurant restaurant = restaurantRepository.findById(id).orElse(null);
+        Restaurant restaurant = checkNotFoundWithId(restaurantRepository.findById(id).orElse(null), id);
         restaurant.setActive(active);
         restaurantRepository.save(restaurant);
     }

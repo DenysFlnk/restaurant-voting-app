@@ -9,5 +9,5 @@ import java.util.List;
 public interface VoteRepository extends JpaRepository<Vote, Integer> {
     Vote getVoteByUserIdAndDateTimeBetween(int userId, LocalDateTime start, LocalDateTime end);
 
-    int countAllByRestaurantIdAndDateTimeBetween(int userId, LocalDateTime start, LocalDateTime end);
+    List<Vote> getAllById(int id);
 }

@@ -2,20 +2,30 @@ package com.restaurantvoting.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.Range;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "meal")
-public class Meal extends AbstractBaseEntity {
+public class Meal extends BaseEntity {
 
     @Column(name = "meal_title")
+    @NotNull
+    @NotBlank
+    @Size(min = 3, max = 100)
     private String mealTitle;
 
     @Column(name = "price")
+    @NotNull
+    @Range(min = 1, max = 5000)
     private int price;
 
     @Column(name = "date")
+    @NotNull
     private LocalDate date;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -26,10 +36,12 @@ public class Meal extends AbstractBaseEntity {
     public Meal() {
     }
 
-    public Meal(String mealTitle, int price, LocalDate date) {
+    public Meal(Integer id, String mealTitle, int price, LocalDate date, Restaurant restaurant) {
+        super(id);
         this.mealTitle = mealTitle;
         this.price = price;
         this.date = date;
+        this.restaurant = restaurant;
     }
 
     public String getMealTitle() {

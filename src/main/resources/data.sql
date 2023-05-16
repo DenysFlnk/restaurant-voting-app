@@ -5,9 +5,9 @@ DELETE FROM RESTAURANT;
 DELETE FROM USERS;
 
 INSERT INTO USERS (NAME, EMAIL, PASSWORD)
-VALUES ('user1', 'user1@gmail.com', '12345'),
-       ('user2', 'user2@gmail.com', 'abcd'),
-       ('admin1', 'admin1@gmail.com', 'gqfqf123');
+VALUES ('user1', 'user1@gmail.com', '{bcrypt}$2a$10$ql0s2FYR94LWt18xct/Rk.hFWWte7F.6NnTYTbQLLhUqfqH7QKu1q'), /*pass: 12345*/
+       ('user2', 'user2@gmail.com', '{bcrypt}$2a$10$vevpuekTcNwz9dwl1tpJ1.nk7KuLg12U4x5R11vM2/lHiQjKwNypu'), /*pass: abcd*/
+       ('admin1', 'admin1@gmail.com', '{bcrypt}$2a$10$W8tyQmY8mxgMzETqx5pM7uKTEr.lBHzsJ8dCAI1gTuZ6GwPvjJcpO'); /*pass: gqfqf123*/
 
 INSERT INTO USER_ROLE (USER_ID, ROLE)
 VALUES (1, 'USER'),

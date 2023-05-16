@@ -22,3 +22,8 @@ spring:
     username: sa
     password:
   h2.console.enabled: true
+
+logging:
+  level:
+    org.hibernate:
+      orm.jdbc.bind: DEBUG

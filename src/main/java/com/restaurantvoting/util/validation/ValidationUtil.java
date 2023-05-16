@@ -40,7 +40,11 @@ public final class ValidationUtil {
         }
     }
 
-    public static void assureChangeVotePermission(Vote vote, LocalDateTime changeDateTime){
+    public static void assureChangeVotePermission(Vote vote, int userId, LocalDateTime changeDateTime){
+        if (vote.id() != userId){
+            throw new IllegalRequestDataException("You do not have permission to modify other user votes");
+        }
+
         LocalDateTime endOfParticularVoting = LocalDateTime.of(vote.getDateTime().toLocalDate(), LocalTime.of(11, 0, 0));
         if (changeDateTime.isAfter(endOfParticularVoting)){
             throw new IllegalRequestDataException("It`s too late to change your vote, dateTime must be before end of voting - " +

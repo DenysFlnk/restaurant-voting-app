@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Persistable;
+import org.springframework.util.Assert;
 
 
 @MappedSuperclass
@@ -21,6 +22,11 @@ public abstract class BaseEntity implements Persistable<Integer> {
 
     protected BaseEntity(Integer id) {
         this.id = id;
+    }
+
+    public int id() {
+        Assert.notNull(id, "Entity must have id");
+        return id;
     }
 
     public void setId(Integer id) {

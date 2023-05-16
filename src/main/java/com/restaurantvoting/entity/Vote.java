@@ -17,7 +17,8 @@ public class Vote extends BaseEntity {
     private Integer restaurantId;
 
     @Column(name = "date_time")
-    private LocalDateTime dateTime = LocalDateTime.now();
+    @NotNull
+    private LocalDateTime dateTime;
 
     public Vote() {
     }

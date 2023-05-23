@@ -83,9 +83,11 @@ public class VoteController {
     }
 
     @GetMapping("user/votes/{voteId}")
-    public Vote get(@PathVariable("voteId") int id){
+    public Vote get(@PathVariable("voteId") int id, @AuthenticationPrincipal(expression = "user") User user){
         log.info("get {}", id);
-        return checkNotFoundWithId(voteRepository.findById(id).orElse(null), id);
+        Vote vote = checkNotFoundWithId(voteRepository.findById(id).orElse(null), id);
+        checkVoteBelongsUser(vote, user.id());
+        return vote;
     }
 
     @PutMapping(value = "user/votes/{voteId}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -95,7 +97,8 @@ public class VoteController {
                        @AuthenticationPrincipal(expression = "user") User user){
         log.info("update {} with id {}", vote, id);
         assureIdConsistent(vote, id);
-        assureChangeVotePermission(vote, user.id(), dateTime);
+        checkVoteBelongsUser(vote, user.id());
+        assureChangeVotePermission(vote, dateTime);
         vote.setDateTime(dateTime);
         voteRepository.save(vote);
     }
@@ -106,7 +109,8 @@ public class VoteController {
                        @AuthenticationPrincipal(expression = "user") User user){
         log.info("delete {}", id);
         Vote deleteVote = checkNotFoundWithId(voteRepository.findById(id).orElse(null), id);
-        assureChangeVotePermission(deleteVote, user.id(), dateTime);
+        checkVoteBelongsUser(deleteVote, user.id());
+        assureChangeVotePermission(deleteVote, dateTime);
         voteRepository.delete(deleteVote);
     }
 

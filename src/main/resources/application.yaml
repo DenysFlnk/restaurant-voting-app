@@ -11,6 +11,13 @@ spring:
         default_batch_fetch_size: 20
         jdbc.batch_size: 20
 
+  mvc:
+    throw-exception-if-no-handler-found: true
+
+  web:
+    resources:
+      add-mappings: false
+
   cache:
     cache-names: activeRestaurants_cache, allVotes_cache
     caffeine:
@@ -27,3 +34,8 @@ logging:
   level:
     org.hibernate:
       orm.jdbc.bind: DEBUG
+
+server:
+  error:
+    whitelabel:
+      enabled: false

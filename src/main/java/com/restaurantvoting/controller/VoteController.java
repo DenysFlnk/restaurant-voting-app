@@ -61,6 +61,7 @@ public class VoteController {
     }
 
     @PostMapping(value = "user/restaurants", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
     public Vote vote(@RequestBody @Valid Vote vote, @AuthenticationPrincipal(expression = "user") User user){
         log.info("vote {}", vote);
         checkNew(vote);
@@ -79,15 +80,13 @@ public class VoteController {
     @Cacheable("allVotes_cache")
     public List<VoteTo> getAll(@AuthenticationPrincipal(expression = "user") User user){
         log.info("getAll for {}", user.getEmail());
-        return VotesUtil.getTos(voteRepository.getAllById(user.id()));
+        return VotesUtil.getTos(voteRepository.getAllByUserId(user.id()));
     }
 
     @GetMapping("user/votes/{voteId}")
     public Vote get(@PathVariable("voteId") int id, @AuthenticationPrincipal(expression = "user") User user){
         log.info("get {}", id);
-        Vote vote = checkNotFoundWithId(voteRepository.findById(id).orElse(null), id);
-        checkVoteBelongsUser(vote, user.id());
-        return vote;
+        return checkNotFoundWithId(voteRepository.getByIdAndUserId(id, user.id()).orElse(null), id);
     }
 
     @PutMapping(value = "user/votes/{voteId}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -97,7 +96,7 @@ public class VoteController {
                        @AuthenticationPrincipal(expression = "user") User user){
         log.info("update {} with id {}", vote, id);
         assureIdConsistent(vote, id);
-        checkVoteBelongsUser(vote, user.id());
+        checkNotFoundWithId(voteRepository.getByIdAndUserId(id, user.id()).orElse(null), id);
         assureChangeVotePermission(vote, dateTime);
         vote.setDateTime(dateTime);
         voteRepository.save(vote);
@@ -108,8 +107,7 @@ public class VoteController {
     public void delete(@PathVariable("voteId") int id, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
                        @AuthenticationPrincipal(expression = "user") User user){
         log.info("delete {}", id);
-        Vote deleteVote = checkNotFoundWithId(voteRepository.findById(id).orElse(null), id);
-        checkVoteBelongsUser(deleteVote, user.id());
+        Vote deleteVote = checkNotFoundWithId(voteRepository.getByIdAndUserId(id, user.id()).orElse(null), id);
         assureChangeVotePermission(deleteVote, dateTime);
         voteRepository.delete(deleteVote);
     }

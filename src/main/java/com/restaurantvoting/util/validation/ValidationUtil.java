@@ -4,7 +4,6 @@ import com.restaurantvoting.entity.Vote;
 import com.restaurantvoting.error.IllegalRequestDataException;
 import com.restaurantvoting.error.NotFoundException;
 import org.springframework.data.domain.Persistable;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
@@ -46,12 +45,6 @@ public final class ValidationUtil {
         if (changeDateTime.isAfter(endOfParticularVoting)) {
             throw new IllegalRequestDataException("It`s too late to change your vote, dateTime must be before end of voting - " +
                     endOfParticularVoting.format(DATE_TIME_FORMATTER));
-        }
-    }
-
-    public static void checkVoteBelongsUser(Vote vote, int userId) {
-        if (vote.id() != userId) {
-            throw new AccessDeniedException("You do not have permission to see/modify other user votes");
         }
     }
 }

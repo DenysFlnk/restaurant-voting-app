@@ -8,6 +8,7 @@ import com.restaurantvoting.repository.MealRepository;
 import com.restaurantvoting.repository.RestaurantRepository;
 import com.restaurantvoting.repository.VoteRepository;
 import com.restaurantvoting.to.RestaurantTo;
+import com.restaurantvoting.to.RestaurantVoteSummaryTo;
 import com.restaurantvoting.to.VoteTo;
 import com.restaurantvoting.util.RestaurantsUtil;
 import com.restaurantvoting.util.VotesUtil;
@@ -22,11 +23,12 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import static com.restaurantvoting.util.DateTimeUtil.*;
-import static com.restaurantvoting.util.validation.ValidationUtil.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.restaurantvoting.util.DateTimeUtil.endOfVoting;
+import static com.restaurantvoting.util.DateTimeUtil.startOfCurrentDay;
+import static com.restaurantvoting.util.validation.ValidationUtil.*;
 
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -49,7 +51,7 @@ public class VoteController {
 
     @GetMapping("user/restaurants")
     @Cacheable("activeRestaurants_cache")
-    public List<RestaurantTo> getAllActiveRestaurants(){
+    public List<RestaurantTo> getAllActiveRestaurants() {
         log.info("getAllActiveRestaurants");
 
         List<Restaurant> restaurants = restaurantRepository.getAllByActiveTrue();
@@ -57,34 +59,46 @@ public class VoteController {
 
         List<Meal> meals = mealRepository.getAllByCurrentDate();
 
-        return RestaurantsUtil.getTos(restaurants, meals);
+        return RestaurantsUtil.getRestaurantTos(restaurants, meals);
     }
 
     @PostMapping(value = "user/restaurants", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public Vote vote(@RequestBody @Valid Vote vote, @AuthenticationPrincipal(expression = "user") User user){
+    public Vote vote(@RequestBody @Valid Vote vote, @AuthenticationPrincipal(expression = "user") User user) {
         log.info("vote {}", vote);
         checkNew(vote);
         assureVotePermission(vote);
 
         vote.setUserId(user.id());
         Vote oldVote = voteRepository.getVoteByUserIdAndDateTimeBetween(vote.getUserId(), startOfCurrentDay, endOfVoting);
-        if (oldVote != null){
+        if (oldVote != null) {
             vote.setId(oldVote.getId());
             return voteRepository.save(vote);
         }
         return voteRepository.save(vote);
     }
 
+    @GetMapping("user/votes/results")
+    public List<RestaurantVoteSummaryTo> getResultOfVoting() {
+        log.info("getResultOfVoting");
+
+        List<Restaurant> restaurants = restaurantRepository.getAllByActiveTrue();
+        if (restaurants == null) return null;
+
+        List<Vote> votes = voteRepository.getAllByDateTimeBetween(startOfCurrentDay, endOfVoting);
+
+        return RestaurantsUtil.getRestaurantVoteSummaryTos(restaurants, votes);
+    }
+
     @GetMapping("user/votes")
     @Cacheable("allVotes_cache")
-    public List<VoteTo> getAll(@AuthenticationPrincipal(expression = "user") User user){
+    public List<VoteTo> getAll(@AuthenticationPrincipal(expression = "user") User user) {
         log.info("getAll for {}", user.getEmail());
         return VotesUtil.getTos(voteRepository.getAllByUserId(user.id()));
     }
 
     @GetMapping("user/votes/{voteId}")
-    public Vote get(@PathVariable("voteId") int id, @AuthenticationPrincipal(expression = "user") User user){
+    public Vote get(@PathVariable("voteId") int id, @AuthenticationPrincipal(expression = "user") User user) {
         log.info("get {}", id);
         return checkNotFoundWithId(voteRepository.getByIdAndUserId(id, user.id()).orElse(null), id);
     }
@@ -93,7 +107,7 @@ public class VoteController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestBody @Valid Vote vote, @PathVariable("voteId") int id,
                        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
-                       @AuthenticationPrincipal(expression = "user") User user){
+                       @AuthenticationPrincipal(expression = "user") User user) {
         log.info("update {} with id {}", vote, id);
         assureIdConsistent(vote, id);
         checkNotFoundWithId(voteRepository.getByIdAndUserId(id, user.id()).orElse(null), id);
@@ -105,7 +119,7 @@ public class VoteController {
     @DeleteMapping("user/votes/{voteId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("voteId") int id, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
-                       @AuthenticationPrincipal(expression = "user") User user){
+                       @AuthenticationPrincipal(expression = "user") User user) {
         log.info("delete {}", id);
         Vote deleteVote = checkNotFoundWithId(voteRepository.getByIdAndUserId(id, user.id()).orElse(null), id);
         assureChangeVotePermission(deleteVote, dateTime);

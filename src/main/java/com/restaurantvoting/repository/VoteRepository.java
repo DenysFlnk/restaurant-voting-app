@@ -13,4 +13,6 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
     List<Vote> getAllByUserId(int userId);
 
     Optional<Vote> getByIdAndUserId(int voteId, int userId);
+
+    List<Vote> getAllByDateTimeBetween(LocalDateTime start, LocalDateTime end);
 }

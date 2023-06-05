@@ -125,5 +125,4 @@ public class VoteController {
         assureChangeVotePermission(deleteVote, dateTime);
         voteRepository.delete(deleteVote);
     }
-
 }

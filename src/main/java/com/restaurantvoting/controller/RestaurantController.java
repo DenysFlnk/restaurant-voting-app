@@ -41,6 +41,7 @@ public class RestaurantController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
     public Restaurant create(@RequestBody @Valid Restaurant restaurant){
         log.info("create {}", restaurant);
         checkNew(restaurant);

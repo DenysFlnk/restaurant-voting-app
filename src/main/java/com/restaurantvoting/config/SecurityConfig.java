@@ -73,7 +73,6 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests()
-                .requestMatchers("/error").permitAll()
                 .requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
                 .requestMatchers("/user/**").hasRole(Role.USER.name())
                 .and().httpBasic().authenticationEntryPoint(authenticationEntryPoint)

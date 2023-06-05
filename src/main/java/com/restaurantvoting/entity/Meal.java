@@ -44,6 +44,14 @@ public class Meal extends BaseEntity {
         this.restaurant = restaurant;
     }
 
+    public Meal(Meal meal) {
+        super(meal.id);
+        this.mealTitle = meal.getMealTitle();
+        this.price = meal.getPrice();
+        this.date = meal.getDate();
+        this.restaurant = meal.getRestaurant();
+    }
+
     public String getMealTitle() {
         return mealTitle;
     }

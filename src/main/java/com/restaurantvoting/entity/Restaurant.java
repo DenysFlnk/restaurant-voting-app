@@ -29,6 +29,12 @@ public class Restaurant extends BaseEntity {
         this.active = active;
     }
 
+    public Restaurant(Restaurant restaurant) {
+        super(restaurant.id());
+        this.title = restaurant.getTitle();
+        this.active = restaurant.isActive();
+    }
+
     public String getTitle() {
         return title;
     }

@@ -6,13 +6,15 @@ import com.restaurantvoting.to.VoteTo;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.restaurantvoting.util.DateTimeUtil.*;
+import static com.restaurantvoting.util.DateTimeUtil.endOfVoting;
+import static com.restaurantvoting.util.DateTimeUtil.startOfCurrentDay;
+
 public class VotesUtil {
 
     private VotesUtil() {
     }
 
-    public static List<VoteTo> getTos(List<Vote> votes){
+    public static List<VoteTo> getTos(List<Vote> votes) {
         LocalDateTime currentDayTime = LocalDateTime.now();
         return votes.stream()
                 .map(vote -> createTo(vote, currentDayTime.isAfter(startOfCurrentDay)
@@ -20,8 +22,7 @@ public class VotesUtil {
                 .toList();
     }
 
-    public static VoteTo createTo(Vote vote, boolean editable){
+    public static VoteTo createTo(Vote vote, boolean editable) {
         return new VoteTo(vote.getId(), vote.getUserId(), vote.getRestaurantId(), vote.getDateTime(), editable);
     }
-
 }

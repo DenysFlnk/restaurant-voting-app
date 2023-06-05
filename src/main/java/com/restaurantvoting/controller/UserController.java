@@ -41,6 +41,7 @@ public class UserController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
     public User create(@RequestBody @Valid User user){
         log.info("create {}", user);
         checkNew(user);

@@ -30,7 +30,14 @@ public class Vote extends BaseEntity {
         this.dateTime = dateTime;
     }
 
-    public int getUserId() {
+    public Vote(Vote vote) {
+        super(vote.id);
+        this.userId = vote.userId;
+        this.restaurantId = vote.restaurantId;
+        this.dateTime = vote.dateTime;
+    }
+
+    public Integer getUserId() {
         return userId;
     }
 
@@ -38,7 +45,7 @@ public class Vote extends BaseEntity {
         this.userId = userId;
     }
 
-    public int getRestaurantId() {
+    public Integer getRestaurantId() {
         return restaurantId;
     }
 

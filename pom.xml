@@ -17,8 +17,9 @@
 
     <properties>
         <java.version>17</java.version>
-        <spring.security.test>6.1.0</spring.security.test>
-        <jackson.datatype.jsr310>2.15.2</jackson.datatype.jsr310>
+        <spring.security.test.version>6.1.0</spring.security.test.version>
+        <jackson.datatype.jsr310.version>2.15.2</jackson.datatype.jsr310.version>
+        <springdoc.version>2.1.0</springdoc.version>
     </properties>
 
 
@@ -53,15 +54,17 @@
             <artifactId>caffeine</artifactId>
         </dependency>
 
+        <!--DB-->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
         </dependency>
 
+        <!--JSON-->
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>${jackson.datatype.jsr310}</version>
+            <version>${jackson.datatype.jsr310.version}</version>
         </dependency>
 
         <!--Test-->
@@ -74,10 +77,16 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
-            <version>${spring.security.test}</version>
+            <version>${spring.security.test.version}</version>
             <scope>test</scope>
         </dependency>
 
+        <!--OpenAPI 3-->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -12,6 +12,8 @@ import com.restaurantvoting.to.RestaurantVoteSummaryTo;
 import com.restaurantvoting.to.VoteTo;
 import com.restaurantvoting.util.RestaurantsUtil;
 import com.restaurantvoting.util.VotesUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +32,7 @@ import static com.restaurantvoting.util.DateTimeUtil.endOfVoting;
 import static com.restaurantvoting.util.DateTimeUtil.startOfCurrentDay;
 import static com.restaurantvoting.util.validation.ValidationUtil.*;
 
+@Tag(name = "Votes", description = "Restaurant choosing, vote management API`s")
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class VoteController {
@@ -49,6 +52,7 @@ public class VoteController {
         this.mealRepository = mealRepository;
     }
 
+    @Operation(summary = "Retrieve all possible restaurants for vote")
     @GetMapping("user/restaurants")
     @Cacheable("activeRestaurants_cache")
     public List<RestaurantTo> getAllActiveRestaurants() {
@@ -62,6 +66,7 @@ public class VoteController {
         return RestaurantsUtil.getRestaurantTos(restaurants, meals);
     }
 
+    @Operation(summary = "Vote for chose restaurant")
     @PostMapping(value = "user/restaurants", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public Vote vote(@RequestBody @Valid Vote vote, @AuthenticationPrincipal(expression = "user") User user) {
@@ -78,6 +83,7 @@ public class VoteController {
         return voteRepository.save(vote);
     }
 
+    @Operation(summary = "Retrieve current results of voting")
     @GetMapping("user/votes/results")
     public List<RestaurantVoteSummaryTo> getResultOfVoting() {
         log.info("getResultOfVoting");
@@ -90,6 +96,7 @@ public class VoteController {
         return RestaurantsUtil.getRestaurantVoteSummaryTos(restaurants, votes);
     }
 
+    @Operation(summary = "Retrieve all votes belong to logged user")
     @GetMapping("user/votes")
     @Cacheable("allVotes_cache")
     public List<VoteTo> getAll(@AuthenticationPrincipal(expression = "user") User user) {
@@ -97,12 +104,14 @@ public class VoteController {
         return VotesUtil.getTos(voteRepository.getAllByUserId(user.id()));
     }
 
+    @Operation(summary = "Retrieve vote by Id")
     @GetMapping("user/votes/{voteId}")
     public Vote get(@PathVariable("voteId") int id, @AuthenticationPrincipal(expression = "user") User user) {
         log.info("get {}", id);
         return checkNotFoundWithId(voteRepository.getByIdAndUserId(id, user.id()).orElse(null), id);
     }
 
+    @Operation(summary = "Modify vote")
     @PutMapping(value = "user/votes/{voteId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestBody @Valid Vote vote, @PathVariable("voteId") int id,
@@ -116,6 +125,7 @@ public class VoteController {
         voteRepository.save(vote);
     }
 
+    @Operation(summary = "Delete vote by Id")
     @DeleteMapping("user/votes/{voteId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("voteId") int id, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,

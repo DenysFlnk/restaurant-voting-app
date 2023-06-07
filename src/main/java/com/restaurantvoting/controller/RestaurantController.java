@@ -2,6 +2,8 @@ package com.restaurantvoting.controller;
 
 import com.restaurantvoting.entity.Restaurant;
 import com.restaurantvoting.repository.RestaurantRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +17,7 @@ import static com.restaurantvoting.util.validation.ValidationUtil.*;
 
 import java.util.List;
 
+@Tag(name = "Restaurants", description = "Restaurant management API`s")
 @RestController
 @RequestMapping(value = "admin/restaurants", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantController {
@@ -28,18 +31,21 @@ public class RestaurantController {
         this.restaurantRepository = restaurantRepository;
     }
 
+    @Operation(summary = "Retrieve all restaurants")
     @GetMapping
     public List<Restaurant> getAll(){
         log.info("getAll");
         return restaurantRepository.findAll(Sort.by(Sort.Direction.DESC, "active"));
     }
 
+    @Operation(summary = "Retrieve restaurant by Id")
     @GetMapping("/{id}")
     public Restaurant get(@PathVariable int id){
         log.info("get {}", id);
         return checkNotFoundWithId(restaurantRepository.findById(id).orElse(null), id);
     }
 
+    @Operation(summary = "Create new restaurant")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public Restaurant create(@RequestBody @Valid Restaurant restaurant){
@@ -48,6 +54,7 @@ public class RestaurantController {
         return restaurantRepository.save(restaurant);
     }
 
+    @Operation(summary = "Delete restaurant by Id")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id){
@@ -56,6 +63,7 @@ public class RestaurantController {
         restaurantRepository.delete(deleteRestaurant);
     }
 
+    @Operation(summary = "Modify restaurant")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestBody @Valid Restaurant restaurant, @PathVariable int id){
@@ -64,6 +72,7 @@ public class RestaurantController {
         restaurantRepository.save(restaurant);
     }
 
+    @Operation(summary = "Activate or deactivate restaurant")
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void activate(@PathVariable int id, @RequestParam boolean active){

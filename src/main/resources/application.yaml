@@ -36,6 +36,8 @@ logging:
       orm.jdbc.bind: DEBUG
 
 server:
+  servlet:
+    context-path: /restaurant-voting
   error:
     whitelabel:
       enabled: false

@@ -2,6 +2,8 @@ package com.restaurantvoting.controller;
 
 import com.restaurantvoting.entity.User;
 import com.restaurantvoting.repository.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,7 @@ import static com.restaurantvoting.util.validation.ValidationUtil.*;
 
 import java.util.List;
 
+@Tag(name = "Users", description = "User accounts management API`s")
 @RestController
 @RequestMapping(value = "admin/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
@@ -28,18 +31,21 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
+    @Operation(summary = "Retrieve all users")
     @GetMapping
     public List<User> getAll(){
         log.info("getAll");
         return userRepository.findAll();
     }
 
+    @Operation(summary = "Retrieve user by Id")
     @GetMapping("/{id}")
     public User get(@PathVariable int id){
         log.info("get {}", id);
         return checkNotFoundWithId(userRepository.findById(id).orElse(null), id);
     }
 
+    @Operation(summary = "Create new user")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public User create(@RequestBody @Valid User user){
@@ -48,6 +54,7 @@ public class UserController {
         return userRepository.save(user);
     }
 
+    @Operation(summary = "Delete user by Id")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id){
@@ -56,6 +63,7 @@ public class UserController {
         userRepository.delete(deleteUser);
     }
 
+    @Operation(summary = "Modify user")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestBody @Valid User user, @PathVariable int id){
@@ -64,6 +72,7 @@ public class UserController {
         userRepository.save(user);
     }
 
+    @Operation(summary = "Enable or disable user by Id")
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void enable(@PathVariable int id, @RequestParam boolean enabled) {

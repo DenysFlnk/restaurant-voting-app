@@ -2,6 +2,7 @@ package com.restaurantvoting.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
@@ -21,7 +22,8 @@ import org.springframework.context.annotation.Configuration;
                         - user2@gmail.com / abcd
                         - admin1@gmail.com / gqfqf123
                         """,
-                version = "v1.0"),
+                version = "v1.0",
+                contact = @Contact(url = "https://github.com/DenysFlnk", name = "Denys Filonenko", email = "filonenko.denys94@gmaul.com")),
         security = @SecurityRequirement(name = "basicAuth")
 )
 public class OpenAPIConfiguration {

@@ -1,4 +1,5 @@
 # Restaurant voting App
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/03b4cb5218d24cf691fc4b4c64ae9684)](https://app.codacy.com/gh/DenysFlnk/restaurant-voting-app/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 > Voting App for choose restaurant where to lunch. Created with Spring Boot 3, Spring Data JPA, H2 DB, Spring Security, Open API 3. 
 
 ## Table of Contents

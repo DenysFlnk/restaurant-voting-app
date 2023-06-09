@@ -13,7 +13,7 @@
     <artifactId>restaurant-voting</artifactId>
     <version>1.0</version>
     <name>restaurant-voting</name>
-    <description>Voting app for picking restaurant</description>
+    <description>Voting App for choose restaurant where to lunch</description>
 
     <properties>
         <java.version>17</java.version>

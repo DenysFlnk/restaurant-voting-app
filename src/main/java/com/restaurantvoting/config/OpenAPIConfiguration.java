@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
                         - admin1@gmail.com / gqfqf123
                         """,
                 version = "v1.0",
-                contact = @Contact(url = "https://github.com/DenysFlnk", name = "Denys Filonenko", email = "filonenko.denys94@gmaul.com")),
+                contact = @Contact(url = "https://github.com/DenysFlnk", name = "Denys Filonenko", email = "filonenko.denys94@gmail.com")),
         security = @SecurityRequirement(name = "basicAuth")
 )
 public class OpenAPIConfiguration {

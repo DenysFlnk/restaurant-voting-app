@@ -3,7 +3,6 @@ package com.restaurantvoting.controller;
 import com.restaurantvoting.AbstractControllerTest;
 import com.restaurantvoting.JsonUtil;
 import com.restaurantvoting.TestUtil;
-import com.restaurantvoting.UserTestData;
 import com.restaurantvoting.entity.User;
 import com.restaurantvoting.error.NotFoundException;
 import com.restaurantvoting.repository.UserRepository;
@@ -50,7 +49,7 @@ class UserControllerTest extends AbstractControllerTest {
     @Test
     void get() throws Exception {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(USER_CONTROLLER_URI + "/" + user1.id())
-                        .with(TestUtil.userHttpBasic(UserTestData.admin1)))
+                        .with(TestUtil.userHttpBasic(admin1)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

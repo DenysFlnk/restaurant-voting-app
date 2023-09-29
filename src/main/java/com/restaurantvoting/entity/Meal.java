@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.Range;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name = "meal")
@@ -82,6 +83,20 @@ public class Meal extends BaseEntity {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Meal meal = (Meal) o;
+        return price == meal.price && mealTitle.equals(meal.mealTitle) && date.equals(meal.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), mealTitle, price, date);
     }
 
     @Override

@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "restaurant")
 public class Restaurant extends BaseEntity {
@@ -49,6 +51,20 @@ public class Restaurant extends BaseEntity {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Restaurant that = (Restaurant) o;
+        return active == that.active && title.equals(that.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), title, active);
     }
 
     @Override

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "vote")
@@ -59,6 +60,20 @@ public class Vote extends BaseEntity {
 
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Vote vote = (Vote) o;
+        return userId.equals(vote.userId) && restaurantId.equals(vote.restaurantId) && dateTime.equals(vote.dateTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), userId, restaurantId, dateTime);
     }
 
     @Override
